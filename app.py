@@ -1,18 +1,22 @@
-from flask import Flask, render_template, request, jsonify
-from transformers import pipeline
+# app.py
+# Digital Personality Clone - Basic Chatbot using OpenAI
 
-app = Flask(_name_)
-chatbot = pipeline("text-generation", model="gpt2")
+import openai
 
-@app.route("/")
-def home():
-    return "Hello! I'm your digital personality clone 🤖"
+# Replace with your OpenAI API key
+openai.api_key = "YOUR_OPENAI_API_KEY"
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    user_message = request.json["message"]
-    response = chatbot(user_message, max_length=100, do_sample=True)[0]["generated_text"]
-    return jsonify({"reply": response})
+print("🤖 Digital Personality Clone Ready! Type 'exit' to quit.\n")
 
-if _name_ == "_main_":
-    app.run(debug=True)
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == "exit":
+        print("Goodbye 👋")
+        break
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": user_input}]
+    )
+
+    print("AI:", response["choices"][0]["message"]["content"])
